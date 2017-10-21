@@ -70,10 +70,11 @@ RUN bundle config build.nokogiri --with-iconv-lib=/usr/local/lib --with-iconv-in
 
 COPY . /mastodon
 
-COPY docker_entrypoint.sh /usr/local/bin/run
+RUN addgroup -g ${GID} mastodon && adduser -h /mastodon -s /bin/sh -D -G mastodon -u ${UID} mastodon
 
-RUN chmod +x /usr/local/bin/run
+RUN find /mastodon -path /mastodon/public/system -prune -o -not -user mastodon -not -group mastodon -print0 | xargs -0 chown -f mastodon:mastodon
 
 VOLUME /mastodon/public/system /mastodon/public/assets /mastodon/public/packs
 
-ENTRYPOINT ["/usr/local/bin/run"]
+USER mastodon:mastodon
+ENTRYPOINT ["/sbin/tini", "--"]
