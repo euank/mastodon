@@ -13,7 +13,7 @@ node('docker') {
     checkout scm
   }
 
-  stage('Push') {
+  stage('Build and Push') {
     withCredentials([usernamePassword(credentialsId: 'dockerhub-wobscalebot', 
           passwordVariable: 'DOCKER_PASS', 
           usernameVariable: 'DOCKER_USER')]) {
