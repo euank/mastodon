@@ -19,6 +19,8 @@ node('docker') {
           usernameVariable: 'DOCKER_USER')]) {
 
       sh '''#!/bin/bash -ex
+        git fetch --unshallow --tags
+
         export HOME=${WORKSPACE}
         docker login --username "${DOCKER_USER}" --password "${DOCKER_PASS}" docker.io
 
